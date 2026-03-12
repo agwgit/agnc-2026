@@ -10,6 +10,7 @@ import { RevealHeaderOnScroll, RevealLinesOnScroll } from "@/components/RevealTe
 import HoverRevealCard from "@/components/HoverRevealCard";
 import OrbitalDrop from "@/components/OrbitalDrop";
 import IntakeModal from "@/components/IntakeModal";
+import Footer from "@/components/Footer";
 
 
 export default function Home() {
@@ -18,7 +19,8 @@ export default function Home() {
 
   return (
     <main
-      className="w-full h-screen overflow-y-auto snap-y snap-mandatory bg-black text-white selection:bg-accent-blue/30"
+      id="main-scroller"
+      className="w-full h-screen overflow-y-auto bg-black text-white selection:bg-accent-blue/30"
 
       onScroll={(e) => setIsDocked(e.currentTarget.scrollTop > 100)}
     >
@@ -211,12 +213,10 @@ export default function Home() {
           <button onClick={() => setIsIntakeOpen(true)} className="bg-white text-black px-16 py-6 font-mono font-black tracking-[0.3em] uppercase hover:bg-white/80 active:scale-95 transition-all text-xs mb-16">
             Get in touch
           </button>
-
-          <p className="font-mono text-[10px] text-white/30 tracking-[0.4em] uppercase">
-            Prefer email? <a href="mailto:agw@duck.com" className="text-white hover:text-accent-orange transition-colors underline underline-offset-[10px] decoration-white/20 pointer-events-auto pl-2">agw@duck.com</a>
-          </p>
         </div>
       </section>
+
+      <Footer />
 
       <IntakeModal isOpen={isIntakeOpen} onClose={() => setIsIntakeOpen(false)} />
     </main>

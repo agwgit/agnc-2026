@@ -7,9 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { splitChars } from "@/utils/split";
 
-if (typeof window !== "undefined") {
-    gsap.registerPlugin(ScrollTrigger);
-}
+gsap.registerPlugin(ScrollTrigger);
 
 const PHASES = [
     {
@@ -104,20 +102,26 @@ export default function ProcessSection() {
     const stepRef = useRef(0);
 
     useGSAP(() => {
-        if (!sectionRef.current) return;
+        if (typeof window === "undefined") return;
+        gsap.registerPlugin(ScrollTrigger);
+
+        const scroller = document.querySelector('#main-scroller');
+        if (!sectionRef.current || !scroller) return;
 
         ScrollTrigger.create({
             trigger: sectionRef.current,
+            scroller: scroller,
             start: "top top",
             end: "bottom bottom",
             onUpdate: (self) => {
                 const progress = self.progress;
-                // Calculate which step we should be on based on scroll progress
-                // We use a slight offset to ensure we can reach the last step comfortably
-                const newStep = Math.min(PHASES.length - 1, Math.floor(progress * (PHASES.length)));
+                const newStep = Math.min(PHASES.length - 1, Math.floor(progress * PHASES.length));
                 setCurrentStep(newStep);
             }
         });
+
+        // Ensure ScrollTrigger is aware of the layout
+        ScrollTrigger.refresh();
     }, { scope: sectionRef });
 
     // Swipe/Drag State
@@ -153,18 +157,20 @@ export default function ProcessSection() {
         if (distance > minSwipeDistance) {
             const next = Math.min(PHASES.length - 1, currentStep + 1);
             const section = sectionRef.current;
-            if (section) {
-                const scrollRange = section.offsetHeight;
-                const target = section.getBoundingClientRect().top + window.scrollY + (next + 0.5) * (scrollRange / PHASES.length);
-                window.scrollTo({ top: target, behavior: 'smooth' });
+            const scroller = document.getElementById('main-scroller');
+            if (section && scroller) {
+                const scrubDistance = section.offsetHeight - scroller.offsetHeight;
+                const target = section.offsetTop + ((next + 0.5) / PHASES.length) * scrubDistance;
+                scroller.scrollTo({ top: target, behavior: 'smooth' });
             }
         } else if (distance < -minSwipeDistance) {
             const next = Math.max(0, currentStep - 1);
             const section = sectionRef.current;
-            if (section) {
-                const scrollRange = section.offsetHeight;
-                const target = section.getBoundingClientRect().top + window.scrollY + (next + 0.5) * (scrollRange / PHASES.length);
-                window.scrollTo({ top: target, behavior: 'smooth' });
+            const scroller = document.getElementById('main-scroller');
+            if (section && scroller) {
+                const scrubDistance = section.offsetHeight - scroller.offsetHeight;
+                const target = section.offsetTop + ((next + 0.5) / PHASES.length) * scrubDistance;
+                scroller.scrollTo({ top: target, behavior: 'smooth' });
             }
         }
         setTouchStart(null);
@@ -676,10 +682,11 @@ export default function ProcessSection() {
                                     e.stopPropagation();
                                     const next = Math.max(0, currentStep - 1);
                                     const section = sectionRef.current;
-                                    if (section) {
-                                        const scrollRange = section.offsetHeight;
-                                        const target = section.getBoundingClientRect().top + window.scrollY + (next + 0.5) * (scrollRange / PHASES.length);
-                                        window.scrollTo({ top: target, behavior: 'smooth' });
+                                    const scroller = document.getElementById('main-scroller');
+                                    if (section && scroller) {
+                                        const scrubDistance = section.offsetHeight - scroller.offsetHeight;
+                                        const target = section.offsetTop + ((next + 0.5) / PHASES.length) * scrubDistance;
+                                        scroller.scrollTo({ top: target, behavior: 'smooth' });
                                     }
                                 }}
                                 className={`text-white transition-opacity ${currentStep === 0 ? "opacity-20 pointer-events-none" : "opacity-60 hover:opacity-100"}`}
@@ -693,10 +700,11 @@ export default function ProcessSection() {
                                     e.stopPropagation();
                                     const next = Math.min(PHASES.length - 1, currentStep + 1);
                                     const section = sectionRef.current;
-                                    if (section) {
-                                        const scrollRange = section.offsetHeight;
-                                        const target = section.getBoundingClientRect().top + window.scrollY + (next + 0.5) * (scrollRange / PHASES.length);
-                                        window.scrollTo({ top: target, behavior: 'smooth' });
+                                    const scroller = document.getElementById('main-scroller');
+                                    if (section && scroller) {
+                                        const scrubDistance = section.offsetHeight - scroller.offsetHeight;
+                                        const target = section.offsetTop + ((next + 0.5) / PHASES.length) * scrubDistance;
+                                        scroller.scrollTo({ top: target, behavior: 'smooth' });
                                     }
                                 }}
                                 className={`text-white transition-opacity ${currentStep === PHASES.length - 1 ? "opacity-20 pointer-events-none" : "opacity-60 hover:opacity-100"}`}
@@ -731,10 +739,11 @@ export default function ProcessSection() {
                                 key={phase.id}
                                 onClick={() => {
                                     const section = sectionRef.current;
-                                    if (section) {
-                                        const scrollRange = section.offsetHeight;
-                                        const target = section.getBoundingClientRect().top + window.scrollY + (idx + 0.5) * (scrollRange / PHASES.length);
-                                        window.scrollTo({ top: target, behavior: 'smooth' });
+                                    const scroller = document.getElementById('main-scroller');
+                                    if (section && scroller) {
+                                        const scrubDistance = section.offsetHeight - scroller.offsetHeight;
+                                        const target = section.offsetTop + ((idx + 0.5) / PHASES.length) * scrubDistance;
+                                        scroller.scrollTo({ top: target, behavior: 'smooth' });
                                     }
                                 }}
                                 className={`px-4 py-2 border font-mono text-[10px] uppercase tracking-[0.2em] transition-all duration-300 ${currentStep === idx

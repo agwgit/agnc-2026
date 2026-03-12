@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { usePathname, useRouter } from "next/navigation";
 
 interface LogoProps {
     isDocked: boolean;
@@ -12,6 +13,8 @@ export default function Logo({ isDocked }: LogoProps) {
     const iconGroupRef = useRef<SVGGElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [isHovered, setIsHovered] = useState(false);
+    const pathname = usePathname();
+    const router = useRouter();
 
     // Animation Logic
     useEffect(() => {
@@ -84,10 +87,14 @@ export default function Logo({ isDocked }: LogoProps) {
             data-clickable="true"
             onClick={(e) => {
                 e.stopPropagation();
-                if ((window as any).triggerShonenWarp) {
-                    (window as any).triggerShonenWarp('#'); // # refers to top usually, but let's check
+                if (pathname === '/') {
+                    if ((window as any).triggerShonenWarp) {
+                        (window as any).triggerShonenWarp('#');
+                    } else {
+                        document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
                 } else {
-                    document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
+                    router.push('/');
                 }
             }}
 
