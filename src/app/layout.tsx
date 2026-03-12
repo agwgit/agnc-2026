@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/Preloader";
+import AgncScreensaver from "@/components/AgncScreensaver";
 
 const inter = Inter({
   variable: "--font-body",
@@ -17,6 +18,9 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "AGNC | #After A.I.",
   description: "We architect high-fidelity products and systems for founders building complicated things.",
+  icons: {
+    icon: "/agnc-favicon.png",
+  },
 };
 
 export default function RootLayout({
@@ -34,6 +38,7 @@ export default function RootLayout({
         className={`${inter.variable} ${spaceMono.variable} antialiased bg-black text-white`}
         suppressHydrationWarning
       >
+        <AgncScreensaver />
         <Preloader />
         {children}
       </body>
