@@ -80,7 +80,7 @@ export default function Logo({ isDocked }: LogoProps) {
             ref={containerRef}
             className={`
                 fixed top-8 left-1/2 -translate-x-1/2 z-[60] transition-all duration-500 cursor-pointer pointer-events-auto
-                ${isDocked ? "scale-[0.6]" : "scale-[0.67] hidden md:block"}
+                ${isDocked ? "scale-[0.6]" : "scale-[0.67]"}
             `}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}

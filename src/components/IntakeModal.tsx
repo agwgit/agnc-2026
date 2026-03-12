@@ -163,10 +163,19 @@ export default function IntakeModal({ isOpen, onClose }: { isOpen: boolean; onCl
                         <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
                     </button>
 
+                    {/* Progress Bar */}
+                    {step < 3 && (
+                        <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white/5 overflow-hidden z-20">
+                            <div
+                                className="h-full bg-[#2dd4bf] transition-all duration-700 ease-out shadow-[0_0_10px_rgba(45,212,191,0.5)]"
+                                style={{ width: `${(step / 2) * 100}%` }}
+                            />
+                        </div>
+                    )}
+
                     {/* Status Indicator */}
                     <div className="font-mono text-[10px] text-[#2dd4bf] tracking-[0.3em] uppercase mb-8 opacity-70 flex justify-between">
                         <span>System // Intake Protocol</span>
-                        <span>{step === 3 ? "Mission Secured" : `Step 0${step} / 02`}</span>
                     </div>
 
                     {/* STEPS */}
