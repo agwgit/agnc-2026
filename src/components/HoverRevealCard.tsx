@@ -11,6 +11,7 @@ interface HoverRevealCardProps {
         body: string;
         cta: string;
         image?: string;
+        link?: string;
     };
     index: number;
 }
@@ -62,7 +63,7 @@ export default function HoverRevealCard({ proj, index }: HoverRevealCardProps) {
 
     return (
         <a
-            href="#"
+            href={proj.link || "#"}
             data-cursor-box="true"
             className="group relative w-full border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-700 overflow-hidden min-h-[40vh] md:min-h-[55vh] flex flex-col justify-end p-8 md:p-16 block cursor-pointer"
             onMouseEnter={onHoverEnter}

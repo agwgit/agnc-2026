@@ -141,32 +141,39 @@ export default function Home() {
                 title: "SuperCrew Studio",
                 meta: "AI PRODUCT · UX SYSTEM · FRONTEND DESIGN",
                 body: "A white-label mission control layer for AI dev shops and automation teams, built to turn invisible workflow into something clients can actually follow.",
-                cta: "Explore case study"
+                cta: "Explore case study",
+                image: "/projects/supercrew.png",
+                link: "https://supercrew.studio"
               },
               {
                 title: "AGNC Assistant",
                 meta: "AI ASSISTANT · BRAND UX · TOOL DESIGN",
                 body: "A studio-grade assistant concept designed to turn brand knowledge into a cleaner, more useful conversational product surface.",
-                cta: "View project"
+                cta: "View project",
+                image: "/projects/assistant.png"
               },
               {
                 title: "Curbee",
                 meta: "CLIENT PLATFORM · UX SYSTEM · PRODUCT DESIGN",
                 body: "Product thinking and interface design for a real operational platform—focused on clarity, momentum, and cleaner workflow surfaces.",
-                cta: "View project"
+                cta: "View project",
+                image: "/projects/curbee.png",
+                link: "https://curbee.com"
               },
               {
                 title: "Angel Compass",
                 meta: "CONCEPT PRODUCT · UX FLOWS · SYSTEM THINKING",
                 body: "A social navigation concept that treats nightlife, timing, and chemistry like a readable system instead of pure luck.",
-                cta: "View project"
+                cta: "View project",
+                image: "/projects/angel-compass.png",
+                link: "https://angelcompass.ai"
               },
               {
                 title: "Illuminadi",
                 meta: "IMMERSIVE WEB · CREATIVE DIRECTION · EXPERIENCE DESIGN",
                 body: "A theatrical digital experience built to feel more like an activated shrine than a standard portfolio site.",
                 cta: "View project",
-                image: "/shonen-devlog-05.png"
+                image: "/projects/illuminadi.png"
               }
             ].map((proj, i) => (
               <HoverRevealCard key={proj.title} proj={proj} index={i} />

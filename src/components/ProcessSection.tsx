@@ -3,7 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { splitChars } from "@/utils/split";
+
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 const PHASES = [
     {
@@ -91,10 +97,28 @@ function RevealHeader({ text, isActive }: { text: string; isActive: boolean }) {
 
 export default function ProcessSection() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const sectionRef = useRef<HTMLElement>(null);
     const [currentStep, setCurrentStep] = useState(0);
 
     // ThreeJS state refs to keep values updated in animation loop
     const stepRef = useRef(0);
+
+    useGSAP(() => {
+        if (!sectionRef.current) return;
+
+        ScrollTrigger.create({
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self) => {
+                const progress = self.progress;
+                // Calculate which step we should be on based on scroll progress
+                // We use a slight offset to ensure we can reach the last step comfortably
+                const newStep = Math.min(PHASES.length - 1, Math.floor(progress * (PHASES.length)));
+                setCurrentStep(newStep);
+            }
+        });
+    }, { scope: sectionRef });
 
     // Swipe/Drag State
     const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -127,9 +151,21 @@ export default function ProcessSection() {
         const distance = touchStart - touchEnd;
         const minSwipeDistance = 50;
         if (distance > minSwipeDistance) {
-            setCurrentStep((prev) => Math.min(PHASES.length - 1, prev + 1));
+            const next = Math.min(PHASES.length - 1, currentStep + 1);
+            const section = sectionRef.current;
+            if (section) {
+                const scrollRange = section.offsetHeight;
+                const target = section.getBoundingClientRect().top + window.scrollY + (next + 0.5) * (scrollRange / PHASES.length);
+                window.scrollTo({ top: target, behavior: 'smooth' });
+            }
         } else if (distance < -minSwipeDistance) {
-            setCurrentStep((prev) => Math.max(0, prev - 1));
+            const next = Math.max(0, currentStep - 1);
+            const section = sectionRef.current;
+            if (section) {
+                const scrollRange = section.offsetHeight;
+                const target = section.getBoundingClientRect().top + window.scrollY + (next + 0.5) * (scrollRange / PHASES.length);
+                window.scrollTo({ top: target, behavior: 'smooth' });
+            }
         }
         setTouchStart(null);
         setTouchEnd(null);
@@ -606,7 +642,7 @@ export default function ProcessSection() {
     }, []);
 
     return (
-        <section className="relative w-full h-[150vh] snap-center bg-black isolation-auto" id="process">
+        <section ref={sectionRef} className="relative w-full h-[600vh] snap-start bg-black isolation-auto" id="process">
             {/* Visuals Container (Sticky background, but positioned to the right) */}
             <div className="absolute inset-0 pointer-events-none z-0">
                 <div className="sticky top-0 w-full h-screen">
@@ -623,7 +659,7 @@ export default function ProcessSection() {
                 <div className="md:w-[50%] flex flex-col justify-center h-screen sticky top-0 pl-0 md:pl-4">
 
                     <div
-                        className="relative min-h-[300px] w-full max-w-md pointer-events-auto cursor-grab active:cursor-grabbing pb-12"
+                        className="relative min-h-[300px] w-full max-w-md pointer-events-auto cursor-grab active:cursor-grabbing pb-12 select-none"
                         data-cursor-text="DRAG"
                         onMouseDown={handleDragStart}
                         onMouseMove={handleDragMove}
@@ -636,7 +672,16 @@ export default function ProcessSection() {
                         {/* Carousel Arrows */}
                         <div className="absolute -left-12 lg:-left-20 top-1/2 -translate-y-1/2 z-20 pointer-events-auto hidden md:block">
                             <button
-                                onClick={(e) => { e.stopPropagation(); setCurrentStep(p => Math.max(0, p - 1)); }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const next = Math.max(0, currentStep - 1);
+                                    const section = sectionRef.current;
+                                    if (section) {
+                                        const scrollRange = section.offsetHeight;
+                                        const target = section.getBoundingClientRect().top + window.scrollY + (next + 0.5) * (scrollRange / PHASES.length);
+                                        window.scrollTo({ top: target, behavior: 'smooth' });
+                                    }
+                                }}
                                 className={`text-white transition-opacity ${currentStep === 0 ? "opacity-20 pointer-events-none" : "opacity-60 hover:opacity-100"}`}
                             >
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
@@ -644,7 +689,16 @@ export default function ProcessSection() {
                         </div>
                         <div className="absolute right-0 lg:-right-4 top-1/2 -translate-y-1/2 z-20 pointer-events-auto hidden md:block">
                             <button
-                                onClick={(e) => { e.stopPropagation(); setCurrentStep(p => Math.min(PHASES.length - 1, p + 1)); }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const next = Math.min(PHASES.length - 1, currentStep + 1);
+                                    const section = sectionRef.current;
+                                    if (section) {
+                                        const scrollRange = section.offsetHeight;
+                                        const target = section.getBoundingClientRect().top + window.scrollY + (next + 0.5) * (scrollRange / PHASES.length);
+                                        window.scrollTo({ top: target, behavior: 'smooth' });
+                                    }
+                                }}
                                 className={`text-white transition-opacity ${currentStep === PHASES.length - 1 ? "opacity-20 pointer-events-none" : "opacity-60 hover:opacity-100"}`}
                             >
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
@@ -675,7 +729,14 @@ export default function ProcessSection() {
                         {PHASES.map((phase, idx) => (
                             <button
                                 key={phase.id}
-                                onClick={() => setCurrentStep(idx)}
+                                onClick={() => {
+                                    const section = sectionRef.current;
+                                    if (section) {
+                                        const scrollRange = section.offsetHeight;
+                                        const target = section.getBoundingClientRect().top + window.scrollY + (idx + 0.5) * (scrollRange / PHASES.length);
+                                        window.scrollTo({ top: target, behavior: 'smooth' });
+                                    }
+                                }}
                                 className={`px-4 py-2 border font-mono text-[10px] uppercase tracking-[0.2em] transition-all duration-300 ${currentStep === idx
                                     ? "bg-accent-blue/10 border-accent-blue text-accent-blue shadow-[0_0_20px_rgba(0,114,206,0.15)]"
                                     : "bg-white/5 border-white/10 text-white/30 hover:text-white hover:border-white/30"
