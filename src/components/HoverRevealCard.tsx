@@ -69,19 +69,18 @@ export default function HoverRevealCard({ proj, index }: HoverRevealCardProps) {
             onMouseEnter={onHoverEnter}
             onMouseLeave={onHoverLeave}
         >
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
             <div className="absolute inset-0 bg-white/[0.02] opacity-50 group-hover:opacity-100 transition-opacity duration-1000">
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:50px_50px] opacity-10 transform -rotate-12 translate-y-10 group-hover:translate-y-0 transition-transform duration-[2s]" />
             </div>
 
             {proj.image && (
-                <div className="absolute top-0 right-0 w-full md:w-1/2 h-full z-[5] overflow-hidden">
+                <div className="absolute inset-0 z-[5] overflow-hidden">
                     <img
                         src={proj.image}
                         alt={proj.title}
-                        className="w-full h-full object-cover object-center grayscale-[30%] opacity-80 group-hover:opacity-100 group-hover:grayscale-0 transform scale-[1.01] group-hover:scale-105 transition-all duration-[1.5s] ease-out"
+                        className="w-full h-full object-cover object-center transform scale-[1.01] group-hover:scale-105 transition-all duration-[1.5s] ease-out"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent" />
                 </div>
             )}
 
