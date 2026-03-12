@@ -153,6 +153,25 @@ export default function IntakeModal({ isOpen, onClose }: { isOpen: boolean; onCl
                 .btn-ghost:hover {
                     border-color: white;
                 }
+                .progress-glow {
+                    background: linear-gradient(90deg, #7AA1DB, #7AA1DB, #f26625);
+                    box-shadow: 0 0 15px rgba(242, 102, 37, 0.4);
+                }
+                .progress-tip {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 30px;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, #f26625);
+                    filter: blur(4px);
+                    opacity: 1;
+                    animation: tipGlow 1.5s ease-in-out infinite alternate;
+                }
+                @keyframes tipGlow {
+                    0% { opacity: 0.5; transform: scaleX(1); transform-origin: right; }
+                    100% { opacity: 1; transform: scaleX(1.8); transform-origin: right; }
+                }
             `}</style>
 
             <div className={`modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 ${isOpen ? "open" : ""}`}>
@@ -165,16 +184,18 @@ export default function IntakeModal({ isOpen, onClose }: { isOpen: boolean; onCl
 
                     {/* Progress Bar */}
                     {step < 3 && (
-                        <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white/5 overflow-hidden z-20">
+                        <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/5 overflow-hidden z-20">
                             <div
-                                className="h-full bg-[#2dd4bf] transition-all duration-700 ease-out shadow-[0_0_10px_rgba(45,212,191,0.5)]"
+                                className="h-full progress-glow transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) relative"
                                 style={{ width: `${(step / 2) * 100}%` }}
-                            />
+                            >
+                                <div className="progress-tip" />
+                            </div>
                         </div>
                     )}
 
                     {/* Status Indicator */}
-                    <div className="font-mono text-[10px] text-[#2dd4bf] tracking-[0.3em] uppercase mb-8 opacity-70 flex justify-between">
+                    <div className="font-mono text-[10px] text-[#7AA1DB] tracking-[0.3em] uppercase mb-8 opacity-70 flex justify-between">
                         <span>System // Intake Protocol</span>
                     </div>
 
@@ -241,8 +262,8 @@ export default function IntakeModal({ isOpen, onClose }: { isOpen: boolean; onCl
 
                         {shouldRender && step === 3 && (
                             <div className="step-container text-center py-12">
-                                <div className="w-16 h-16 mx-auto border border-[#2dd4bf] rounded-full flex items-center justify-center mb-6">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[#2dd4bf]"><path d="M20 6L9 17l-5-5" /></svg>
+                                <div className="w-16 h-16 mx-auto border border-[#7AA1DB] rounded-full flex items-center justify-center mb-6">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[#7AA1DB]"><path d="M20 6L9 17l-5-5" /></svg>
                                 </div>
                                 <RevealHeaderOnScroll tag="h3" text="Brief Received." className="font-display font-black text-4xl sm:text-5xl mb-4 tracking-tight" />
                                 <RevealLinesOnScroll text="The line is secured. Our team will review the architecture and reach out shortly to discuss the handoff." className="font-body text-gray-400 text-sm max-w-sm mx-auto leading-relaxed" />

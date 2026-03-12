@@ -62,7 +62,7 @@ export default function Preloader() {
                 <h1 className="font-serif italic font-light text-[2.5rem] text-white opacity-90">AGNC Studio</h1>
                 <div className="w-full h-[1px] bg-white/5 relative overflow-hidden">
                     <div
-                        className="absolute top-0 left-0 h-full bg-[#2dd4bf] shadow-[0_0_10px_#2dd4bf] transition-all duration-100 linear"
+                        className="absolute top-0 left-0 h-full bg-[#7AA1DB] shadow-[0_0_10px_rgba(122,161,219,0.5)] transition-all duration-100 linear"
                         style={{ width: `${progress}%` }}
                     />
                 </div>

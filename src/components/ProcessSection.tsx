@@ -247,9 +247,9 @@ export default function ProcessSection() {
                 particlePositions[i * 3 + 1] = chaosPositions[i * 3 + 1];
                 particlePositions[i * 3 + 2] = chaosPositions[i * 3 + 2];
 
-                colors[i * 3] = 0.467;
-                colors[i * 3 + 1] = 0.635;
-                colors[i * 3 + 2] = 0.788;
+                colors[i * 3] = 0.478;
+                colors[i * 3 + 1] = 0.631;
+                colors[i * 3 + 2] = 0.859;
             }
 
             const geo = new THREE.BufferGeometry();
@@ -274,9 +274,9 @@ export default function ProcessSection() {
             const lineColors = new Float32Array(lineCount * 3);
 
             for (let i = 0; i < lineCount; i++) {
-                lineColors[i * 3] = 0.467;     // Lightblue R
-                lineColors[i * 3 + 1] = 0.635;   // Lightblue G
-                lineColors[i * 3 + 2] = 0.788;   // Lightblue B
+                lineColors[i * 3] = 0.478;     // Lightblue R
+                lineColors[i * 3 + 1] = 0.631;   // Lightblue G
+                lineColors[i * 3 + 2] = 0.859;   // Lightblue B
             }
             wireGeo.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
 
@@ -339,7 +339,7 @@ export default function ProcessSection() {
 
             const trackGeo = new THREE.TorusGeometry(4.2, 0.008, 16, 100);
             const trackMat = new THREE.MeshBasicMaterial({
-                color: 0x77a2c9,
+                color: 0x7aa1db,
                 transparent: true,
                 opacity: 0,
                 blending: THREE.AdditiveBlending
@@ -349,7 +349,7 @@ export default function ProcessSection() {
             orbitTrack.rotation.y = Math.PI / 8;
             satellites.add(orbitTrack);
 
-            const colors = [0x77a2c9, 0xf26625, 0xffffff];
+            const colors = [0x7aa1db, 0xf26625, 0xffffff];
             for (let i = 0; i < 8; i++) {
                 const satGeo = new THREE.SphereGeometry(0.06, 16, 16);
                 const satMat = new THREE.MeshBasicMaterial({
@@ -480,9 +480,9 @@ export default function ProcessSection() {
                 }
 
                 // Target Colors (Lerp between Lightblue and Orange)
-                const targetR = 0.467 + (0.949 - 0.467) * hotFactor;
-                const targetG = 0.635 + (0.400 - 0.635) * hotFactor;
-                const targetB = 0.788 + (0.145 - 0.788) * hotFactor;
+                const targetR = 0.478 + (0.949 - 0.478) * hotFactor;
+                const targetG = 0.631 + (0.400 - 0.631) * hotFactor;
+                const targetB = 0.859 + (0.145 - 0.859) * hotFactor;
 
                 // Smoothly interpolate to the target color
                 lCol[i * 3] += (targetR - lCol[i * 3]) * 0.15;
@@ -564,9 +564,9 @@ export default function ProcessSection() {
                         positions[i * 3 + 2] = returnV.z;
                     }
 
-                    colors[i * 3] += (0.467 - colors[i * 3]) * 0.05;
-                    colors[i * 3 + 1] += (0.635 - colors[i * 3 + 1]) * 0.05;
-                    colors[i * 3 + 2] += (0.788 - colors[i * 3 + 2]) * 0.05;
+                    colors[i * 3] += (0.478 - colors[i * 3]) * 0.05;
+                    colors[i * 3 + 1] += (0.631 - colors[i * 3 + 1]) * 0.05;
+                    colors[i * 3 + 2] += (0.859 - colors[i * 3 + 2]) * 0.05;
                 }
             }
             particles.geometry.attributes.position.needsUpdate = true;
