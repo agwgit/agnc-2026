@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --color-theater-dark: #030303;
+  --color-theater-teal: #2dd4bf;
+  --color-theater-bronze: #888888;
+  --color-parlour-cream: #ffffff;
+  --color-accent-rose: #f43f5e;
+
+  --color-accent-blue: #0072ce;
+  --color-accent-orange: #ff5a00;
+  --color-accent-lightblue: #7eb2e6;
+  --color-accent-peach: #ffb469;
+
+  --font-display: "Satoshi", "Inter", sans-serif;
+  --font-body: "Satoshi", "Inter", sans-serif;
+  --font-mono: var(--font-mono);
+}
+
+:root {
+  background-color: var(--color-theater-dark);
+  color: var(--color-parlour-cream);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  background-color: #030303;
+  font-family: var(--font-body);
+}
+
+/* Initial state for animated text to prevent FOUC */
+[data-anim] {
+  opacity: 0;
+}
