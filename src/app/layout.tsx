@@ -16,6 +16,7 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://agnc.studio"),
   title: "AGNC | #After A.I.",
   description: "We architect high-fidelity products and systems for founders building complicated things.",
   icons: {
