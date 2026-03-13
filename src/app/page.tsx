@@ -187,20 +187,6 @@ export default function Home() {
       {/* 4. DEPLOYMENT PHASE / PROCESS */}
       <ProcessSection />
 
-      {/* 6. AGNC.LAB */}
-      <section className="relative w-full py-40 snap-center bg-black border-y border-white/5 px-6 lg:px-24">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-12 z-10 relative">
-          <div className="flex-1">
-            <RevealHeaderOnScroll tag="h2" text="AGNC.LAB" className="font-display font-black text-[clamp(2.5rem,5vw,4rem)] text-white mb-4 tracking-tighter" />
-            <p className="font-mono text-accent-lightblue/80 text-[10px] tracking-[0.4em] uppercase mb-8">Experiments, prototypes, and active investigations.</p>
-            <RevealLinesOnScroll tag="div" text="Loose studies from the studio—ideas in motion, surfaces in development, systems still becoming." className="font-body text-gray-400 max-w-lg leading-relaxed text-lg" />
-          </div>
-          <a href="#" className="border border-white/10 font-mono text-[10px] text-white hover:bg-white hover:text-black transition-all duration-500 px-10 py-5 tracking-[0.3em] uppercase shrink-0">
-            Open archive
-          </a>
-        </div>
-      </section>
-
       {/* 5. CONTACT */}
       <section id="contact" className="relative w-full min-h-screen snap-center flex items-center justify-center p-6 bg-black text-center">
         <div className="max-w-4xl mx-auto flex flex-col items-center">
