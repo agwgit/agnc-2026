@@ -3,151 +3,157 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 export default function AgncScreensaver() {
-  const [isIdle, setIsIdle] = useState(false);
-  const [artifactPos, setArtifactPos] = useState({ x: 100, y: 100 });
-  const [cornerHit, setCornerHit] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [containerSize, setContainerSize] = useState({ w: 0, h: 0 });
+    const [isIdle, setIsIdle] = useState(false);
+    const [artifactPos, setArtifactPos] = useState({ x: 100, y: 100 });
+    const [cornerHit, setCornerHit] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [containerSize, setContainerSize] = useState({ w: 0, h: 0 });
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const requestRef = useRef<number | undefined>(undefined);
-  
-  // Artifact Settings
-  const size = 150; 
-  // Slightly mismatched speeds prevent endless non-corner loops
-  const speedX = 3.2; 
-  const speedY = 2.7; 
-  const velocity = useRef({ dx: speedX, dy: speedY });
+    const containerRef = useRef<HTMLDivElement>(null);
+    const requestRef = useRef<number | undefined>(undefined);
 
-  // 1. INACTIVITY TIMER (30 SECONDS)
-  useEffect(() => {
-    let timeout: NodeJS.Timeout | undefined = undefined;
-    const idleTime = 30000; // 30 seconds
+    // Artifact Settings
+    const size = 150;
+    // Slightly mismatched speeds prevent endless non-corner loops
+    const speedX = 2.56;
+    const speedY = 2.16;
+    const velocity = useRef({ dx: speedX, dy: speedY });
 
-    const resetTimer = () => {
-      if (isIdle) {
-        setIsIdle(false);
-        setTimeout(() => setCornerHit(false), 1000); 
-      }
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setIsIdle(true);
-      }, idleTime);
-    };
+    // 1. INACTIVITY TIMER (30 SECONDS)
+    useEffect(() => {
+        let timeout: NodeJS.Timeout | undefined = undefined;
+        const idleTime = 30000; // 30 seconds
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === '`') {
-        setIsIdle(prev => {
-          const next = !prev;
-          if (!next) {
-            // Reset easter egg on wake up
-            setTimeout(() => setCornerHit(false), 1000);
-          }
-          return next;
-        });
-      } else {
-        resetTimer();
-      }
-    };
+        const resetTimer = () => {
+            if (isIdle) {
+                setIsIdle(false);
+                document.body.classList.remove('screensaver-active');
+                setTimeout(() => setCornerHit(false), 1000);
+            }
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                setIsIdle(true);
+                document.body.classList.add('screensaver-active');
+            }, idleTime);
+        };
 
-    const events = ['mousemove', 'mousedown', 'touchstart', 'scroll'];
-    events.forEach(e => window.addEventListener(e, resetTimer as any));
-    window.addEventListener('keydown', handleKeyDown);
-    
-    // Start initial timer only if not already idle
-    if (!isIdle) {
-        if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            setIsIdle(true);
-        }, idleTime);
-    }
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === '`') {
+                setIsIdle(prev => {
+                    const next = !prev;
+                    if (!next) {
+                        // Reset easter egg on wake up
+                        document.body.classList.remove('screensaver-active');
+                        setTimeout(() => setCornerHit(false), 1000);
+                    } else {
+                        document.body.classList.add('screensaver-active');
+                    }
+                    return next;
+                });
+            } else {
+                resetTimer();
+            }
+        };
 
-    return () => {
-      events.forEach(e => window.removeEventListener(e, resetTimer as any));
-      window.removeEventListener('keydown', handleKeyDown);
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [isIdle]);
+        const events = ['mousemove', 'mousedown', 'touchstart', 'scroll'];
+        events.forEach(e => window.addEventListener(e, resetTimer as any));
+        window.addEventListener('keydown', handleKeyDown);
 
-  // 2. DVD BOUNCER LOGIC WITH CORNER MAGNET
-  useEffect(() => {
-    if (!isIdle) {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-      return;
-    }
-
-    const updatePosition = () => {
-      if (!containerRef.current) return;
-      
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
-      setContainerSize({ w: width, h: height });
-
-      setArtifactPos((prev) => {
-        let nx = prev.x + velocity.current.dx;
-        let ny = prev.y + velocity.current.dy;
-
-        // X-axis collision
-        if (nx <= 0) {
-          nx = 0;
-          velocity.current.dx = speedX;
-        } else if (nx + size >= width) {
-          nx = width - size;
-          velocity.current.dx = -speedX;
+        // Start initial timer only if not already idle
+        if (!isIdle) {
+            if (timeout) clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                setIsIdle(true);
+                document.body.classList.add('screensaver-active');
+            }, idleTime);
         }
 
-        // Y-axis collision
-        if (ny <= 0) {
-          ny = 0;
-          velocity.current.dy = speedY;
-        } else if (ny + size >= height) {
-          ny = height - size;
-          velocity.current.dy = -speedY;
+        return () => {
+            events.forEach(e => window.removeEventListener(e, resetTimer as any));
+            window.removeEventListener('keydown', handleKeyDown);
+            if (timeout) clearTimeout(timeout);
+        };
+    }, [isIdle]);
+
+    // 2. DVD BOUNCER LOGIC WITH CORNER MAGNET
+    useEffect(() => {
+        if (!isIdle) {
+            if (requestRef.current) cancelAnimationFrame(requestRef.current);
+            return;
         }
 
-        // THE EASTER EGG: Corner Tolerance & Magnet
-        const tolerance = 12;
-        const nearLeft = nx <= tolerance;
-        const nearRight = nx + size >= width - tolerance;
-        const nearTop = ny <= tolerance;
-        const nearBottom = ny + size >= height - tolerance;
+        const updatePosition = () => {
+            if (!containerRef.current) return;
 
-        if ((nearLeft || nearRight) && (nearTop || nearBottom) && !cornerHit) {
-          setCornerHit(true);
-          // Magnetic snap to the exact corner for visual perfection
-          if (nearLeft) nx = 0;
-          if (nearRight) nx = width - size;
-          if (nearTop) ny = 0;
-          if (nearBottom) ny = height - size;
-        }
+            const width = containerRef.current.clientWidth;
+            const height = containerRef.current.clientHeight;
+            setContainerSize({ w: width, h: height });
 
-        return { x: nx, y: ny };
-      });
+            setArtifactPos((prev) => {
+                let nx = prev.x + velocity.current.dx;
+                let ny = prev.y + velocity.current.dy;
 
-      requestRef.current = requestAnimationFrame(updatePosition);
-    };
+                // X-axis collision
+                if (nx <= 0) {
+                    nx = 0;
+                    velocity.current.dx = speedX;
+                } else if (nx + size >= width) {
+                    nx = width - size;
+                    velocity.current.dx = -speedX;
+                }
 
-    requestRef.current = requestAnimationFrame(updatePosition);
-    return () => {
-        if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    };
-  }, [isIdle, cornerHit]);
+                // Y-axis collision
+                if (ny <= 0) {
+                    ny = 0;
+                    velocity.current.dy = speedY;
+                } else if (ny + size >= height) {
+                    ny = height - size;
+                    velocity.current.dy = -speedY;
+                }
 
-  // Ensure fonts are loaded
-  useEffect(() => {
-    const link = document.createElement('link');
-    link.href = "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-  }, []);
+                // THE EASTER EGG: Corner Tolerance & Magnet
+                const tolerance = 12;
+                const nearLeft = nx <= tolerance;
+                const nearRight = nx + size >= width - tolerance;
+                const nearTop = ny <= tolerance;
+                const nearBottom = ny + size >= height - tolerance;
 
-  // Generate an ultra-long string to prevent the SVG loop glitch
-  const phrase = "fearless by design. built with precision. \u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0 ";
-  const endlessMarqueeText = phrase.repeat(60); // Repeats 60 times to ensure it never runs out
+                if ((nearLeft || nearRight) && (nearTop || nearBottom) && !cornerHit) {
+                    setCornerHit(true);
+                    // Magnetic snap to the exact corner for visual perfection
+                    if (nearLeft) nx = 0;
+                    if (nearRight) nx = width - size;
+                    if (nearTop) ny = 0;
+                    if (nearBottom) ny = height - size;
+                }
 
-  return (
-    <>
-      <style>{`
+                return { x: nx, y: ny };
+            });
+
+            requestRef.current = requestAnimationFrame(updatePosition);
+        };
+
+        requestRef.current = requestAnimationFrame(updatePosition);
+        return () => {
+            if (requestRef.current) cancelAnimationFrame(requestRef.current);
+        };
+    }, [isIdle, cornerHit]);
+
+    // Ensure fonts are loaded
+    useEffect(() => {
+        const link = document.createElement('link');
+        link.href = "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap";
+        link.rel = "stylesheet";
+        document.head.appendChild(link);
+    }, []);
+
+    // Generate an ultra-long string to prevent the SVG loop glitch
+    const phrase = "fearless by design. built with precision. \u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0 ";
+    const endlessMarqueeText = phrase.repeat(60); // Repeats 60 times to ensure it never runs out
+
+    return (
+        <>
+            <style>{`
         @keyframes fadeBlurIn {
           0% {
             opacity: 0;
@@ -211,121 +217,121 @@ export default function AgncScreensaver() {
         }
       `}</style>
 
-      {/* OVERLAY CONTAINER */}
-      <div 
-        ref={containerRef}
-        className={`fixed inset-0 overflow-hidden screensaver-overlay ${isIdle ? 'active' : ''}`}
-      >
-        
-        {/* ARCHED HORIZON & MARQUEE WITH FADED EDGES */}
-        <div 
-          className="absolute inset-0 flex items-center justify-center arch-container"
-          style={{
-            /* CSS Mask applies the beautiful fade on the left and right edges */
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
-            maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)'
-          }}
-        >
-          <svg 
-            viewBox="0 0 1400 600" 
-            className="w-[120vw] h-auto max-w-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            preserveAspectRatio="xMidYMid meet"
-          >
-            <defs>
-              <path 
-                id="textArch" 
-                d="M -200,580 Q 700,-320 1600,580" 
-                fill="none" 
-              />
-              <path 
-                id="glowArch" 
-                d="M -200,600 Q 700,-300 1600,600" 
-                fill="none" 
-              />
-            </defs>
-
-            {/* Dramatic Magma Glow Layers */}
-            <use 
-              href="#glowArch" 
-              stroke="rgba(217, 119, 6, 0.5)" 
-              strokeWidth="24" 
-              style={{ filter: 'blur(20px)' }} 
-            />
-            <use 
-              href="#glowArch" 
-              stroke="rgba(251, 146, 60, 0.7)" 
-              strokeWidth="10" 
-              style={{ filter: 'blur(8px)' }} 
-            />
-            <use 
-              href="#glowArch" 
-              stroke="rgba(255, 237, 213, 0.9)" 
-              strokeWidth="1.5" 
-            />
-
-            {/* TEXT MARQUEE */}
-            <text 
-              fill="rgba(255, 255, 255, 0.4)"
-              style={{ 
-                fontFamily: "'Inter', sans-serif", 
-                fontSize: '32px', 
-                fontWeight: '300', 
-                letterSpacing: '0.12em' 
-              }}
+            {/* OVERLAY CONTAINER */}
+            <div
+                ref={containerRef}
+                className={`fixed inset-0 overflow-hidden screensaver-overlay ${isIdle ? 'active' : ''}`}
             >
-              <textPath href="#textArch" startOffset="0%">
-                {endlessMarqueeText}
-                {/* 5-minute continuous scroll deep into negative space prevents any visual looping jumps */}
-                <animate 
-                  attributeName="startOffset" 
-                  from="0%" 
-                  to="-500%" 
-                  dur="300s" 
-                  repeatCount="indefinite" 
-                />
-              </textPath>
-            </text>
-          </svg>
-        </div>
 
-        {/* 3D ARTIFACT (DVD BOUNCER) */}
-        <div 
-          className="absolute artifact-container"
-          style={{
-            left: `${artifactPos.x}px`,
-            top: `${artifactPos.y}px`,
-            width: `${size}px`,
-            height: `${size}px`,
-            willChange: 'left, top'
-          }}
-        >
-          <img 
-            src="/agnc-onyx.gif" 
-            alt="AGNC 3D Artifact"
-            className={`w-full h-full object-contain transition-all duration-700 ${cornerHit ? 'easter-egg-active' : ''}`}
-            style={{ 
-              filter: cornerHit ? 'none' : 'drop-shadow(0 20px 25px rgba(217, 119, 6, 0.3))' 
-            }}
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-              const fallback = target.nextSibling as HTMLElement;
-              if (fallback) fallback.style.display = 'block';
-            }}
-          />
-          
-          {/* Fallback Shape */}
-          <div 
-            className="w-full h-full bg-stone-900 border border-orange-500/30 rounded-[30%] shadow-[0_0_30px_rgba(217,119,6,0.3)] hidden"
-            style={{ transform: 'rotate(45deg)' }}
-          ></div>
-        </div>
+                {/* ARCHED HORIZON & MARQUEE WITH FADED EDGES */}
+                <div
+                    className="absolute inset-0 flex items-center justify-center arch-container"
+                    style={{
+                        /* CSS Mask applies the beautiful fade on the left and right edges */
+                        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+                        maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)'
+                    }}
+                >
+                    <svg
+                        viewBox="0 0 1400 600"
+                        className="w-[120vw] h-auto max-w-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                        preserveAspectRatio="xMidYMid meet"
+                    >
+                        <defs>
+                            <path
+                                id="textArch"
+                                d="M -200,580 Q 700,-320 1600,580"
+                                fill="none"
+                            />
+                            <path
+                                id="glowArch"
+                                d="M -200,600 Q 700,-300 1600,600"
+                                fill="none"
+                            />
+                        </defs>
 
-        {/* HUD Overlay */}
-        <div className="absolute bottom-8 right-8 font-mono text-[10px] text-orange-500/40 uppercase tracking-[0.3em] arch-container">
-          SYS.IDLE // AGNC.Studio
-        </div>
-      </div>
-    </>
-  );
+                        {/* Dramatic Magma Glow Layers */}
+                        <use
+                            href="#glowArch"
+                            stroke="rgba(217, 119, 6, 0.5)"
+                            strokeWidth="24"
+                            style={{ filter: 'blur(20px)' }}
+                        />
+                        <use
+                            href="#glowArch"
+                            stroke="rgba(251, 146, 60, 0.7)"
+                            strokeWidth="10"
+                            style={{ filter: 'blur(8px)' }}
+                        />
+                        <use
+                            href="#glowArch"
+                            stroke="rgba(255, 237, 213, 0.9)"
+                            strokeWidth="1.5"
+                        />
+
+                        {/* TEXT MARQUEE */}
+                        <text
+                            fill="rgba(255, 255, 255, 0.4)"
+                            style={{
+                                fontFamily: "'Inter', sans-serif",
+                                fontSize: '32px',
+                                fontWeight: '300',
+                                letterSpacing: '0.12em'
+                            }}
+                        >
+                            <textPath href="#textArch" startOffset="0%">
+                                {endlessMarqueeText}
+                                {/* 5-minute continuous scroll deep into negative space prevents any visual looping jumps */}
+                                <animate
+                                    attributeName="startOffset"
+                                    from="0%"
+                                    to="-500%"
+                                    dur="300s"
+                                    repeatCount="indefinite"
+                                />
+                            </textPath>
+                        </text>
+                    </svg>
+                </div>
+
+                {/* 3D ARTIFACT (DVD BOUNCER) */}
+                <div
+                    className="absolute artifact-container"
+                    style={{
+                        left: `${artifactPos.x}px`,
+                        top: `${artifactPos.y}px`,
+                        width: `${size}px`,
+                        height: `${size}px`,
+                        willChange: 'left, top'
+                    }}
+                >
+                    <img
+                        src="/agnc-onyx.gif"
+                        alt="AGNC 3D Artifact"
+                        className={`w-full h-full object-contain transition-all duration-700 ${cornerHit ? 'easter-egg-active' : ''}`}
+                        style={{
+                            filter: cornerHit ? 'none' : 'drop-shadow(0 20px 25px rgba(217, 119, 6, 0.3))'
+                        }}
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const fallback = target.nextSibling as HTMLElement;
+                            if (fallback) fallback.style.display = 'block';
+                        }}
+                    />
+
+                    {/* Fallback Shape */}
+                    <div
+                        className="w-full h-full bg-stone-900 border border-orange-500/30 rounded-[30%] shadow-[0_0_30px_rgba(217,119,6,0.3)] hidden"
+                        style={{ transform: 'rotate(45deg)' }}
+                    ></div>
+                </div>
+
+                {/* HUD Overlay */}
+                <div className="absolute bottom-8 right-8 font-mono text-[10px] text-orange-500/40 uppercase tracking-[0.3em] arch-container">
+                    SYS.IDLE // AGNC.Studio
+                </div>
+            </div>
+        </>
+    );
 }

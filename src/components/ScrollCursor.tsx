@@ -154,6 +154,7 @@ export default function ScrollCursor() {
     return createPortal(
         <div
             ref={cursorRef}
+            id="scroll-cursor"
             className={`
                 fixed top-0 left-0 z-[9999] pointer-events-none mix-blend-difference
                 hidden lg:flex items-center justify-center
