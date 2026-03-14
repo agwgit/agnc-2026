@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The AI-Coded Product Check | AGNC.LAB</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900,301,401,501,701,901&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #2dd4bf;
+            --bg: #030303;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #ffffff;
+            font-family: 'Satoshi', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-satoshi {
+            font-family: 'Satoshi', sans-serif;
+        }
+
+        .font-mono-space {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .font-crimson {
+            font-family: 'Crimson Pro', serif;
+        }
+
+        /* Terminal Input Styling */
+        .terminal-input {
+            background: transparent !important;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
+            border-radius: 0;
+        }
+
+        .terminal-input:focus {
+            border-bottom: 2px solid #ffffff;
+            padding-left: 0.5rem;
+        }
+
+        .terminal-input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            opacity: 0;
+            animation: fadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        /* Button Hover */
+        .btn-download {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-download:hover {
+            transform: scale(0.97);
+            background-color: #f0f0f0;
+        }
+
+        .btn-download:active {
+            transform: scale(0.95);
+        }
+
+        .btn-download:disabled {
+            background: #111;
+            color: #444;
+            cursor: not-allowed;
+            transform: none;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Success State Hide/Show */
+        .hidden-state {
+            display: none !important;
+        }
+
+        /* Subtle Glow on Hero */
+        .hero-text {
+            text-shadow: 0 0 50px rgba(255, 255, 255, 0.05);
+        }
+
+        ::-selection {
+            background-color: #2dd4bf50;
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-6 md:p-12">
+
+    <div class="max-w-2xl w-full">
+        <!-- Header / Kicker -->
+        <div class="mb-14 fade-up">
+            <span class="font-mono-space text-[11px] uppercase tracking-[0.5em] text-[#2dd4bf] font-medium">
+                SYS.DIAGNOSTIC // AGNC.LAB
+            </span>
+        </div>
+
+        <div id="main-content">
+            <!-- Hero -->
+            <h1
+                class="font-satoshi italic font-light text-5xl md:text-6xl mb-10 tracking-tight leading-[1.1] hero-text fade-up delay-1">
+                The AI-Coded Product Check.
+            </h1>
+
+            <!-- Sub-headline -->
+            <p class="font-satoshi text-gray-400 text-[1.1rem] leading-relaxed mb-16 max-w-xl fade-up delay-2">
+                A 5-minute guided diagnosis. Find out exactly why your product feels generic, and where to fix it first.
+                Stop guessing. Run your interface through the Narrative Physics framework.
+            </p>
+
+            <!-- Form Area -->
+            <div id="form-container" class="fade-up delay-3">
+                <form id="lead-form" class="space-y-12">
+                    <div class="group relative">
+                        <input type="text" id="name" name="name" required placeholder="Name"
+                            class="terminal-input text-white text-lg">
+                    </div>
+                    <div class="group relative">
+                        <input type="email" id="email" name="email" required placeholder="Email Address"
+                            class="terminal-input text-white text-lg">
+                    </div>
+                    <div class="group relative">
+                        <input type="url" id="url" name="url" placeholder="Product URL (Optional)"
+                            class="terminal-input text-white text-lg">
+                    </div>
+
+                    <div class="pt-10">
+                        <button type="submit" id="submit-btn"
+                            class="btn-download w-full py-6 bg-white text-black font-mono-space font-bold uppercase tracking-[0.4em] text-[12px]">
+                            Download The Check
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Success State -->
+        <div id="success-state" class="hidden-state text-center py-24 fade-up">
+            <h2 class="font-crimson italic font-extralight text-6xl md:text-8xl text-white selection:bg-[#2dd4bf]/20">
+                Access Granted.
+            </h2>
+            <p class="font-mono-space text-[10px] uppercase tracking-[0.5em] text-[#2dd4bf] mt-12 opacity-80">
+                Opening Diagnostic File...
+            </p>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * CONFIGURATION
+         * Replace with your Make.com Webhook URL and PDF path.
+         */
+        const WEBHOOK_URL = "https://hook.us2.make.com/fe4vxzoeafi8fkkqmjhjui9sl5yzvwj2";
+        const PDF_LINK = "https://agnc.pro/The-AI-Coded-Product-Check.pdf";
+
+        const form = document.getElementById('lead-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const mainContent = document.getElementById('main-content');
+        const successState = document.getElementById('success-state');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Form Data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const url = document.getElementById('url').value;
+
+            // Simple check
+            if (!name || !email) return;
+
+            // UI Feedback
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Processing...";
+            submitBtn.classList.add('opacity-50');
+
+            try {
+                // Submit to Webhook
+                // We don't 'await' it if we want the user to get the PDF immediately, 
+                // but for a premium feel, a small wait is better.
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // Standard CORS mode to ensure JSON body is parsed correctly by Make
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        product_url: url,
+                        timestamp: new Date().toISOString(),
+                        source: 'Product Check Landing Page'
+                    }),
+                });
+
+                // Transition to Success
+                transitionToSuccess();
+
+            } catch (error) {
+                console.error('Submission error:', error);
+                // Fail silently to the user so they still get the PDF
+                transitionToSuccess();
+            }
+        });
+
+        function transitionToSuccess() {
+            // Hide main content
+            mainContent.classList.add('hidden-state');
+
+            // Show success state
+            successState.classList.remove('hidden-state');
+
+            // Trigger download after a slight delay for dramatic effect
+            setTimeout(() => {
+                window.open(PDF_LINK, '_blank');
+            }, 800);
+        }
+    </script>
+</body>
+
+</html>
