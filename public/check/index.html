@@ -253,16 +253,10 @@
         });
 
         function transitionToSuccess() {
-            // Hide main content
-            mainContent.classList.add('hidden-state');
-
-            // Show success state
-            successState.classList.remove('hidden-state');
-
-            // Trigger download after a slight delay for dramatic effect
-            setTimeout(() => {
-                window.open(PDF_LINK, '_blank');
-            }, 800);
+            // Get current URL search params to preserve attribution/UTMs
+            const params = window.location.search;
+            // Redirect in the same tab - most reliable for mobile webviews (IG/TikTok)
+            window.location.href = './success' + params;
         }
     </script>
 </body>

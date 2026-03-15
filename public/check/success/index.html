@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Granted | AGNC.LAB</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900,301,401,501,701,901&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #2dd4bf;
+            --bg: #030303;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #ffffff;
+            font-family: 'Satoshi', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-satoshi {
+            font-family: 'Satoshi', sans-serif;
+        }
+
+        .font-mono-space {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .font-crimson {
+            font-family: 'Crimson Pro', serif;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            opacity: 0;
+            animation: fadeUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .btn-premium {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-premium:hover {
+            transform: scale(0.98);
+            background-color: #f0f0f0;
+        }
+
+        ::-selection {
+            background-color: #2dd4bf50;
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-6 md:p-12 text-center">
+
+    <div class="max-w-xl w-full">
+        <!-- Header / Kicker -->
+        <div class="mb-14 fade-up">
+            <span class="font-mono-space text-[11px] uppercase tracking-[0.5em] text-[#2dd4bf] font-medium">
+                DIAGNOSTIC COMPLETE // AGNC.LAB
+            </span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-crimson italic font-extralight text-6xl md:text-8xl mb-8 tracking-tight fade-up delay-1">
+            Access Granted.
+        </h1>
+
+        <!-- Sub-headline -->
+        <p class="font-satoshi text-gray-400 text-lg mb-16 fade-up delay-2">
+            Your AI-Coded Product Check is ready. Click below to open the diagnostic file.
+        </p>
+
+        <!-- CTA Area -->
+        <div class="space-y-8 fade-up delay-2">
+            <a href="https://agnc.pro/The-AI-Coded-Product-Check.pdf"
+                class="btn-premium block w-full py-6 bg-white text-black font-mono-space font-bold uppercase tracking-[0.4em] text-[12px]">
+                Open The Check
+            </a>
+
+            <div class="pt-4">
+                <p class="font-mono-space text-[10px] text-gray-500 uppercase tracking-widest mb-2">
+                    Fallback Link
+                </p>
+                <a href="https://agnc.pro/The-AI-Coded-Product-Check.pdf"
+                    class="font-satoshi text-gray-400 hover:text-white border-b border-gray-800 transition-colors text-sm">
+                    Direct Download (PDF)
+                </a>
+            </div>
+
+            <div class="pt-12 border-t border-white/5">
+                <a href="https://agnc.pro"
+                    class="font-mono-space text-[10px] text-gray-500 uppercase tracking-[0.4em] hover:text-[#2dd4bf] transition-colors">
+                    Back to AGNC.Studio →
+                </a>
+            </div>
+
+            <p class="font-satoshi text-[11px] text-gray-600 mt-12 max-w-xs mx-auto">
+                If the file does not load within Instagram, tap the "..." menu and select "Open in Browser".
+            </p>
+        </div>
+    </div>
+
+</body>
+
+</html>
